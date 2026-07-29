@@ -42,9 +42,9 @@ import { ToastService } from '../../../services/toast.service';
       color: #fff;
       animation: slide-in 0.18s ease-out;
     }
-    .toast--success { background: var(--color-success); }
-    .toast--error { background: var(--color-primary); }
-    .toast--info { background: var(--color-ink); }
+    .toast--success { background: #1e9e64; }
+    .toast--error { background: #e30613; }
+    .toast--info { background: #2f6fb3; }
     .toast__close {
       background: none;
       border: none;

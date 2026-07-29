@@ -140,7 +140,6 @@ reserverSalle(salle: Salle): void {
     switch (statut) {
       case 'DISPONIBLE': return 'Disponible';
       case 'RESERVEE': return 'Réservée';
-      case 'EN_ATTENTE': return 'En attente';
       case 'EN_MAINTENANCE': return 'Maintenance';
       default: return statut;
     }

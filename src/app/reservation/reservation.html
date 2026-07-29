@@ -1,0 +1,228 @@
+<div class="app-shell">
+
+  <!-- Barre latérale -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+           <img src="../../../assets/images/logo_blanc.png" alt="Sopra HR Software" class="login__logo"/>
+     
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <a routerLink="/salles" class="nav-item"><i class="ti ti-door"></i><span>Salles</span></a>
+      <a routerLink="/employe/reservations/nouvelle" class="nav-item active"><i class="ti ti-calendar-event"></i><span>Réserver une salle</span></a>
+      <a routerLink="/profil"  class="nav-item"><i class="ti ti-clipboard-list"></i><span>Profil</span></a>
+      <a routerLink="/employe/problemes" class="nav-item"><i class="ti ti-chart-bar"></i><span>Signaler probleme</span></a>
+      <a routerLink="/employe/avis" class="nav-item"><i class="ti ti-chart-bar"></i><span>Donner un avis</span></a>
+    </nav>
+
+   
+  </aside>
+
+  <!-- Contenu principal -->
+  <div class="main">
+
+    <!-- Barre du haut -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <span class="topbar-icon"><i class="ti ti-calendar-event"></i></span>
+        <div>
+          <h1>Réserver une salle</h1>
+          <p>Choisissez votre salle</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="user-menu">
+          <div class="user-info">
+            <span class="user-name">{{ user?.prenom }} {{ user?.nom }}</span>
+            <span class="user-role">{{ user?.role === 'ADMIN' ? 'Administrateur RH' : 'Employé' }}</span>
+          </div>
+          <i class="ti ti-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+
+    <!-- Contenu -->
+    <div class="content">
+
+      <!-- Formulaire de réservation -->
+      <section class="card form-card">
+        <div class="card-header">
+          <span class="card-icon"><i class="ti ti-calendar-event"></i></span>
+          <h2>Réserver une salle</h2>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" novalidate>
+
+          <div class="form-group">
+            <label for="roomName">Salle</label>
+            <select
+              id="roomName"
+              name="roomName"
+              [(ngModel)]="form.salle_id">
+
+              <option [ngValue]="null">
+                Choisir une salle
+              </option>
+
+              <option
+                *ngFor="let room of rooms"
+                [value]="room.id">
+
+                {{ room.nom }} ({{ room.capacite }} places)
+
+              </option>
+
+            </select>
+            <p class="field-error" *ngIf="loadRoomsError">{{ loadRoomsError }}</p>
+          </div>
+
+          <div class="form-group">
+            <label for="sujet">Sujet de la réunion</label>
+            <input id="sujet" name="sujet" type="text" [(ngModel)]="form.sujet" placeholder="Description brève">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="date">Date</label>
+              <input id="date" name="date" type="date" [(ngModel)]="form.date">
+            </div>
+            <div class="form-group">
+              <label for="heure_debut">Heure de début</label>
+              <input id="heure_debut" name="heure_debut" type="time" [(ngModel)]="form.heure_debut">
+            </div>
+            <div class="form-group">
+              <label for="heure_fin">Heure de fin</label>
+              <input id="heure_fin" name="heure_fin" type="time" [(ngModel)]="form.heure_fin">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="duree">Durée (en minutes)</label>
+              <input id="duree" name="duree" type="number" min="1" [(ngModel)]="form.duree">
+            </div>
+            <div class="form-group">
+              <label for="type_reunion">Type de réunion</label>
+              <select id="type_reunion" name="type_reunion" [(ngModel)]="form.type_reunion">
+                <option value="" disabled selected>Sélectionner un type</option>
+                <option value="REUNION_CLIENT">Réunion client</option>
+                <option value="REUNION_INTERNE">Réunion interne</option>
+                <option value="FORMATION">Formation</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="type_reservation">Type de réservation</label>
+            <select id="type_reservation" name="type_reservation" [(ngModel)]="form.type_reservation">
+              <option value="" disabled selected>Sélectionner un type</option>
+              <option value="NON_RECCURENTE">Réservation ponctuelle</option>
+              <option value="RECCURENTE">Réservation récurrente</option>
+            </select>
+          </div>
+
+          <!-- Champs supplémentaires affichés uniquement si récurrente -->
+          <div class="form-row" *ngIf="form.type_reservation === 'RECCURENTE'">
+            <div class="form-group">
+              <label for="frequence">Fréquence</label>
+              <select id="frequence" name="frequence" [(ngModel)]="form.frequence">
+                <option value="WEEKLY">Chaque semaine</option>
+                <option value="MONTHLY">Chaque mois</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="occurrences">Nombre d'occurrences</label>
+              <input id="occurrences" name="occurrences" type="number" min="1" max="52" [(ngModel)]="form.occurrences">
+            </div>
+          </div>
+
+          <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+          <p class="message success" *ngIf="successMessage">{{ successMessage }}</p>
+
+          <!-- Salles alternatives proposées par le backend en cas de conflit (409) -->
+          <div class="alternatives" *ngIf="salleAlternatives.length">
+            <p>Salles disponibles à ce créneau :</p>
+            <ul>
+              <li *ngFor="let alt of salleAlternatives">{{ alt.nom }} ({{ alt.capacite }} places)</li>
+            </ul>
+          </div>
+
+          <button type="submit" class="submit-btn" [disabled]="isSubmitting">
+            <i class="ti ti-calendar-event"></i>
+            {{ isSubmitting ? 'Réservation en cours...' : 'Réserver la salle' }}
+          </button>
+
+        </form>
+      </section>
+
+      <!-- Grille de disponibilité -->
+      <section class="card availability-card">
+        <div class="card-header spread">
+          <div class="card-header">
+            <span class="card-icon"><i class="ti ti-calendar-event"></i></span>
+            <h2>Disponibilité des salles</h2>
+          </div>
+
+          <div class="date-controls">
+            <button class="icon-btn" (click)="goToPreviousDay()"><i class="ti ti-arrow-left"></i></button>
+            <span class="date-text">{{ selectedDate | date:'dd/MM/yyyy' }}</span>
+            <button class="icon-btn" (click)="goToNextDay()"><i class="ti ti-arrow-right"></i></button>
+            <button class="today-btn" (click)="goToToday()">Aujourd'hui</button>
+          </div>
+        </div>
+
+        <!-- Version simple pour l'instant : statut global de chaque salle.
+             La grille heure par heure sera reconstruite à l'étape suivante
+             à partir de /api/reservations (date_debut = date_fin = selectedDate). -->
+        <div class="table-wrapper">
+          <table class="availability-table">
+            <thead>
+              <tr>
+                <th>Salle</th>
+                <th>Capacité</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let room of rooms">
+                <td class="room-cell"><strong>{{ room.nom }}</strong></td>
+                <td>{{ room.capacite }} places</td>
+                <td>
+                  <span class="slot-cell" [ngClass]="roomStatusClass(room.statut)">{{ room.statut }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Légende -->
+        <div class="legend">
+          <div class="legend-item">
+            <span class="legend-icon disponible"><i class="ti ti-check"></i></span>
+            <div>
+              <strong>Disponible</strong>
+              <p>La salle est libre</p>
+            </div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon occupee"><i class="ti ti-users"></i></span>
+            <div>
+              <strong>Occupée / En attente</strong>
+              <p>La salle est déjà réservée</p>
+            </div>
+          </div>
+          <div class="legend-item">
+            <span class="legend-icon maintenance"><i class="ti ti-tool"></i></span>
+            <div>
+              <strong>Maintenance</strong>
+              <p>La salle est en maintenance</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>

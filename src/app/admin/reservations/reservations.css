@@ -1,0 +1,44 @@
+.page-header {
+  margin-bottom: 20px;
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  p { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+}
+
+.toolbar {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+
+  select, input {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-light);
+    }
+  }
+}
+
+.toolbar__date-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--color-slate);
+  font-weight: 500;
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}

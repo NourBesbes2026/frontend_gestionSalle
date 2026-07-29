@@ -1,0 +1,42 @@
+<div class="page-header">
+  <div>
+    <h1>Avis sur les salles</h1>
+    <p class="text-muted">Retours des employés après utilisation des salles de formation.</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <p class="text-muted">Chargement des avis…</p>
+} @else if (!avisList().length) {
+  <div class="empty-state card">
+    <h3>Aucun avis déposé</h3>
+    <p>Les retours des employés apparaîtront ici après utilisation des salles.</p>
+  </div>
+} @else {
+  <div class="avis-grid">
+    @for (avis of avisList(); track avis.id) {
+      <div class="card avis-card">
+        <div class="avis-card__header">
+          <div>
+            <p class="avis-card__salle">{{ avis.salle_nom }}</p>
+            <p class="text-muted avis-card__author">{{ avis.user_prenom }} {{ avis.user_nom }}</p>
+          </div>
+          <div class="avis-card__score">{{ score(avis) }}/5</div>
+        </div>
+
+        <ul class="avis-card__criteria">
+          @for (critere of criteres(avis); track critere.label) {
+            <li [class.avis-card__criteria--ok]="critere.value">
+              <span class="avis-card__criteria-dot"></span>
+              {{ critere.label }}
+            </li>
+          }
+        </ul>
+
+        @if (avis.commentaire) {
+          <p class="avis-card__comment">« {{ avis.commentaire }} »</p>
+        }
+      </div>
+    }
+  </div>
+}

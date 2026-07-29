@@ -1,0 +1,113 @@
+<div class="page-header">
+  <div>
+    <h1>Donner un avis</h1>
+    <p class="text-muted">Partagez votre expérience après une réservation validée et utilisée.</p>
+  </div>
+</div>
+
+@if (loading()) {
+  <p class="text-muted">Chargement de vos réservations validées…</p>
+} @else if (!reservationsValidees().length) {
+  <div class="empty-state card">
+    <h3>Aucune réservation validée pour le moment</h3>
+    <p>Une fois qu'une de vos réservations sera validée, vous pourrez donner votre avis ici.</p>
+  </div>
+} @else {
+  <div class="avis-layout">
+    <div class="card form-card">
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label for="reservation_id">Réservation concernée</label>
+          <select id="reservation_id" formControlName="reservation_id">
+            <option [value]="0" disabled>Sélectionnez une réservation</option>
+            @for (r of reservationsValidees(); track r.id) {
+              <option [value]="r.id" [disabled]="submittedIds().has(r.id)">
+                {{ r.salle_nom }} — {{ r.date | date: 'dd/MM/yyyy' }} ({{ r.sujet }})
+                {{ submittedIds().has(r.id) ? '· avis déjà envoyé' : '' }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <p class="form-card__section-title">Votre évaluation</p>
+        <div class="criteria-grid">
+          <label class="criteria-item">
+            <input type="checkbox" formControlName="confort" />
+            Confort de la salle
+          </label>
+          <label class="criteria-item">
+            <input type="checkbox" formControlName="proprete" />
+            Propreté
+          </label>
+          <label class="criteria-item">
+            <input type="checkbox" formControlName="equipFonctionnel" />
+            Équipements fonctionnels
+          </label>
+          <label class="criteria-item">
+            <input type="checkbox" formControlName="wifi" />
+            Wifi
+          </label>
+          <label class="criteria-item">
+            <input type="checkbox" formControlName="reservationSimple" />
+            Facilité de réservation
+          </label>
+        </div>
+
+        <div class="field">
+          <label for="commentaire">Commentaire (facultatif)</label>
+          <textarea
+            id="commentaire"
+            formControlName="commentaire"
+            rows="3"
+            placeholder="Un commentaire à ajouter ?"
+          ></textarea>
+        </div>
+
+        <div class="form-card__actions">
+          <button type="submit" class="btn btn--primary" [disabled]="submitting()">
+            {{ submitting() ? 'Envoi en cours…' : "Envoyer mon avis" }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card illustration-card" aria-hidden="true">
+      <svg class="illustration" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
+        <!-- Sol -->
+        <ellipse cx="180" cy="262" rx="130" ry="14" class="illustration__shadow" />
+
+        <!-- Bulle de dialogue -->
+        <rect x="70" y="46" width="188" height="112" rx="16" class="illustration__panel" />
+        <path d="M118 158L104 182L142 158Z" class="illustration__panel" />
+
+        <!-- Étoiles -->
+        <path class="illustration__star" d="M116 96L121.4 106.9L133.5 108.6L124.7 117.2L126.8 129.2L116 123.5L105.2 129.2L107.3 117.2L98.5 108.6L110.6 106.9Z" />
+        <path class="illustration__star" d="M164 96L169.4 106.9L181.5 108.6L172.7 117.2L174.8 129.2L164 123.5L153.2 129.2L155.3 117.2L146.5 108.6L158.6 106.9Z" />
+        <path class="illustration__star" d="M212 96L217.4 106.9L229.5 108.6L220.7 117.2L222.8 129.2L212 123.5L201.2 129.2L203.3 117.2L194.5 108.6L206.6 106.9Z" />
+
+        <!-- Petit trait "commentaire" -->
+        <rect x="110" y="140" width="100" height="6" rx="3" class="illustration__line-fill" />
+
+        <!-- Personnage -->
+        <circle cx="252" cy="182" r="16" class="illustration__skin" />
+        <path d="M230 250C230 224 238 208 252 208C266 208 274 224 274 250" class="illustration__clothes" />
+
+        <!-- Bras levé, pouce en l'air -->
+        <path d="M242 214L226 190" class="illustration__clothes" stroke-width="10" stroke-linecap="round" fill="none" />
+        <circle cx="222" cy="184" r="9" class="illustration__skin" />
+        <rect x="216" y="170" width="10" height="18" rx="5" class="illustration__skin" />
+
+        <path d="M262 214L280 226" class="illustration__clothes" stroke-width="10" stroke-linecap="round" fill="none" />
+
+        <!-- Accents -->
+        <circle cx="60" cy="70" r="4" class="illustration__accent" />
+        <circle cx="300" cy="120" r="3" class="illustration__accent" />
+        <circle cx="50" cy="176" r="3" class="illustration__accent" />
+      </svg>
+
+      <p class="illustration__caption">
+        Votre avis aide à améliorer les salles pour toute l'équipe.
+      </p>
+    </div>
+  </div>
+}

@@ -1,0 +1,85 @@
+<div class="page-header">
+  <div>
+    <h1>Salles de formation</h1>
+    <p class="text-muted">Gérez les salles, leur capacité, leurs équipements et leur disponibilité.</p>
+  </div>
+  <button type="button" class="btn btn--primary" (click)="openCreateModal()">+ Ajouter une salle</button>
+</div>
+
+<div class="toolbar card">
+  <input
+    type="search"
+    placeholder="Rechercher une salle…"
+    [ngModel]="searchTerm()"
+    (ngModelChange)="searchTerm.set($event)"
+    class="toolbar__search"
+  />
+  <select [ngModel]="statutFilter()" (ngModelChange)="statutFilter.set($event)">
+    <option value="">Tous les statuts</option>
+    @for (statut of statutOptions; track statut) {
+      <option [value]="statut">{{ statutLabels[statut] }}</option>
+    }
+  </select>
+</div>
+
+@if (loading()) {
+  <p class="text-muted">Chargement des salles…</p>
+} @else if (!filteredSalles().length) {
+  <div class="empty-state card">
+    <h3>Aucune salle trouvée</h3>
+    <p>Ajustez vos filtres ou créez une nouvelle salle pour commencer.</p>
+  </div>
+} @else {
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Capacité</th>
+          <th>Statut</th>
+          <th>Équipements</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (salle of filteredSalles(); track salle.id) {
+          <tr>
+            <td><strong>{{ salle.nom }}</strong></td>
+            <td>{{ salle.capacite }} pers.</td>
+            <td><app-status-badge [text]="statutLabels[salle.statut]" [toneName]="tone(salle.statut)" /></td>
+            <td>
+              @if (salle.equipements.length) {
+                <span class="text-muted">{{ salle.equipements.join(', ') }}</span>
+              } @else {
+                <span class="text-muted">—</span>
+              }
+            </td>
+            <td>
+              <div class="row-actions">
+                <button type="button" class="btn btn--ghost" (click)="openEditModal(salle)">Modifier</button>
+                <button type="button" class="btn btn--danger" (click)="askDelete(salle)">Supprimer</button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<app-salle-form-modal
+  [open]="modalOpen()"
+  [salle]="editingSalle()"
+  [saving]="saving()"
+  (close)="closeModal()"
+  (save)="handleSave($event)"
+/>
+
+<app-confirm-dialog
+  [open]="confirmDeleteOpen()"
+  title="Supprimer la salle"
+  [message]="'Voulez-vous vraiment supprimer « ' + (salleToDelete()?.nom ?? '') + ' » ? Cette action est irréversible.'"
+  confirmLabel="Supprimer"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+/>

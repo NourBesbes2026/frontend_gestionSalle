@@ -1,0 +1,125 @@
+<div class="app-shell">
+
+  <!-- Barre latérale -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+           <img src="../../../assets/images/logo_blanc.png" alt="Sopra HR Software" class="login__logo"/>
+     
+    </div>
+
+    <nav class="sidebar-nav">
+    
+      <a routerLink="/salles" class="alignement"><i class="ti ti-door sidebar__icon" ></i><span class="nav-item " style=" font-style: italic;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Salles</span></a>
+      <a routerLink="/employe/reservations/nouvelle" class="alignement"  ><i class="ti ti-calendar-event sidebar__icon"></i><span class="nav-item ">Réserver une salle</span></a>
+      <a routerLink="/employe/reservations" class="alignement"  ><i class="ti ti-calendar-event sidebar__icon"></i><span class="nav-item ">Mes réservations</span></a>
+      <a routerLink="/employe/problemes" class="alignement"><i class="ti ti-alert-triangle sidebar__icon"></i><span class="nav-item ">Signaler probleme</span></a>
+      <a  routerLink="/employe/avis"  class="alignement"><i class="ti ti-star sidebar__icon"></i><span class="nav-item ">Donner un avis</span></a>
+      <a routerLink="/profil" class="alignement"><i class="ti ti-user sidebar__icon"></i><span class="nav-item ">Profil</span></a>
+    </nav>
+
+    
+  </aside>
+
+  <!-- Contenu principal -->
+  <div class="main">
+
+    <!-- Barre du haut -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <span class="topbar-icon"><i class="ti ti-door"></i></span>
+        <div>
+          <h1>Salles</h1>
+          <p>Toutes les salles de Soprahr</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+         <div class="topbar__user">
+        
+        <button type="button" class="btn btn--ghost" (click)="logout()">Déconnexion</button>
+      </div>
+
+      </div>
+    </header>
+
+    <!-- Contenu -->
+    <div class="content">
+
+      <!-- Barre de filtres -->
+      <div class="filters-bar">
+        <div class="filter-group">
+          <label for="statutFilter">Statut</label>
+          <select id="statutFilter" name="statutFilter" [(ngModel)]="statutFilter" (change)="onFilterChange()">
+            <option value="">Tous les statuts</option>
+            <option value="DISPONIBLE">Disponible</option>
+            <option value="RESERVEE">Réservée</option>
+            <option value="EN_ATTENTE">En attente</option>
+            <option value="EN_MAINTENANCE">Maintenance</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="capaciteMinFilter">Capacité minimale</label>
+          <input
+            id="capaciteMinFilter"
+            name="capaciteMinFilter"
+            type="number"
+            min="1"
+            placeholder="Ex : 6"
+            [(ngModel)]="capaciteMinFilter"
+            (change)="onFilterChange()">
+        </div>
+
+        <button class="reset-btn" (click)="resetFilters()">
+          <i class="ti ti-filter-x"></i> Réinitialiser
+        </button>
+
+        <div class="filters-legend">
+          <span><i class="dot dispo"></i>Disponible</span>
+          <span><i class="dot attente"></i>En attente</span>
+          <span><i class="dot maint"></i>Maintenance</span>
+        </div>
+      </div>
+
+      <!-- État de chargement / erreur -->
+      <p class="state-message" *ngIf="isLoading">Chargement des salles...</p>
+      <p class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <p class="state-message" *ngIf="!isLoading && !errorMessage && salles.length === 0">
+        Aucune salle ne correspond à ces critères.
+      </p>
+
+      <!-- Grille des salles -->
+      <div class="salles-grid" *ngIf="!isLoading && salles.length > 0">
+        <div class="salle-card" *ngFor="let salle of salles" [ngClass]="statutClass(salle.statut)">
+
+         
+
+          <div class="salle-body">
+            <div class="salle-header">
+              <h3>{{ salle.nom }}</h3>
+              <span class="badge" [ngClass]="statutClass(salle.statut)">{{ statutLabel(salle.statut) }}</span>
+            </div>
+
+            <div class="salle-capacity">
+              <i class="ti ti-users"></i> {{ salle.capacite }} places
+            </div>
+
+            <div class="salle-equipements" *ngIf="salle.equipements?.length">
+              <span class="equip-chip" *ngFor="let eq of salle.equipements">{{ eq }}</span>
+            </div>
+
+            <a
+              class="salle-action"
+              [class.disabled]="salle.statut !== 'DISPONIBLE'"
+              (click)="reserverSalle(salle)">
+              <i class="ti ti-calendar-event"></i>
+              Réserver cette salle
+            </a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

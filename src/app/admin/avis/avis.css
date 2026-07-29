@@ -1,0 +1,79 @@
+.page-header {
+  margin-bottom: 20px;
+  h1 { font-size: 22px; margin-bottom: 4px; }
+}
+
+.avis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.avis-card {
+  padding: 20px;
+}
+
+.avis-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+
+.avis-card__salle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.avis-card__author {
+  font-size: 12.5px;
+}
+
+.avis-card__score {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.avis-card__criteria {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--color-slate);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.avis-card__criteria-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border-strong);
+  flex-shrink: 0;
+}
+
+.avis-card__criteria--ok {
+  color: var(--color-ink);
+  font-weight: 500;
+
+  .avis-card__criteria-dot { background: var(--color-success); }
+}
+
+.avis-card__comment {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--color-slate);
+  border-top: 1px solid var(--color-border);
+  padding-top: 12px;
+}

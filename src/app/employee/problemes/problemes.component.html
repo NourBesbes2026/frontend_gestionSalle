@@ -1,0 +1,109 @@
+<div class="page-header">
+  <div>
+    <h1>Signaler un problème</h1>
+    <p class="text-muted">Vidéoprojecteur en panne, salle non propre, matériel défectueux… signalez-le ici.</p>
+  </div>
+</div>
+
+<div class="problem-layout">
+  <div class="card form-card">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="salle_id">Salle concernée</label>
+        @if (loadingSalles()) {
+          <p class="text-muted">Chargement des salles…</p>
+        } @else {
+          <select id="salle_id" formControlName="salle_id">
+            <option [value]="0" disabled>Sélectionnez une salle</option>
+            @for (salle of salles(); track salle.id) {
+              <option [value]="salle.id">{{ salle.nom }}</option>
+            }
+          </select>
+        }
+      </div>
+
+      <div class="field">
+        <label for="type_probleme">Type de problème</label>
+        <select id="type_probleme" formControlName="type_probleme">
+          @for (type of typeOptions; track type) {
+            <option [value]="type">{{ typeLabels[type] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="commentaire">Description</label>
+        <textarea
+          id="commentaire"
+          formControlName="commentaire"
+          rows="4"
+          placeholder="Décrivez le problème rencontré le plus précisément possible…"
+        ></textarea>
+        @if (form.controls.commentaire.invalid && form.controls.commentaire.touched) {
+          <span class="field__error">10 caractères minimum.</span>
+        }
+      </div>
+
+      <div class="form-card__actions">
+        <button type="submit" class="btn btn--primary" [disabled]="submitting()">
+          {{ submitting() ? 'Envoi en cours…' : 'Signaler le problème' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card illustration-card" aria-hidden="true">
+    <svg class="illustration" viewBox="0 0 360 300" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sol -->
+      <ellipse cx="180" cy="262" rx="130" ry="14" class="illustration__shadow" />
+
+      <!-- Mur / écran -->
+      <rect x="70" y="40" width="180" height="120" rx="10" class="illustration__panel" />
+      <rect x="86" y="56" width="148" height="88" rx="6" class="illustration__screen" />
+      <path d="M118 100L138 118L160 88" class="illustration__line" fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.18" />
+
+      <!-- Pied du support -->
+      <rect x="152" y="160" width="16" height="34" rx="4" class="illustration__panel" />
+      <rect x="128" y="190" width="64" height="10" rx="5" class="illustration__panel" />
+
+      <!-- Badge d'alerte -->
+      <circle cx="238" cy="52" r="26" class="illustration__badge-bg" />
+      <path d="M238 40V54" class="illustration__badge-icon" stroke-width="5" stroke-linecap="round" />
+      <circle cx="238" cy="63" r="2.6" class="illustration__badge-icon-fill" />
+
+      <!-- Personnage -->
+      <circle cx="278" cy="176" r="16" class="illustration__skin" />
+      <path d="M256 246C256 220 264 204 278 204C292 204 300 220 300 246" class="illustration__clothes" />
+      <path d="M268 210L250 226" class="illustration__clothes" stroke-width="10" stroke-linecap="round" fill="none" />
+      <path d="M288 210L262 190" class="illustration__clothes" stroke-width="10" stroke-linecap="round" fill="none" />
+
+      <!-- Presse-papiers -->
+      <rect x="238" y="182" width="30" height="38" rx="4" class="illustration__clipboard" />
+      <rect x="244" y="176" width="18" height="8" rx="2" class="illustration__clipboard-clip" />
+      <path d="M244 194H262M244 202H262M244 210H256" class="illustration__clipboard-line" stroke-width="2.4" stroke-linecap="round" />
+
+      <!-- Petites étoiles / accents -->
+      <circle cx="58" cy="80" r="4" class="illustration__accent" />
+      <circle cx="304" cy="130" r="3" class="illustration__accent" />
+      <circle cx="46" cy="180" r="3" class="illustration__accent" />
+    </svg>
+
+    <p class="illustration__caption">
+      Un détail précis nous aide à intervenir plus vite. Merci de votre vigilance !
+    </p>
+  </div>
+</div>
+
+@if (recentSignalements().length) {
+  <div class="recent-list">
+    <h3>Signalements envoyés dans cette session</h3>
+    <ul>
+      @for (item of recentSignalements(); track item.date) {
+        <li>
+          <strong>{{ item.salleNom }}</strong> — {{ item.type }}
+          <span class="text-muted">({{ item.date }})</span>
+        </li>
+      }
+    </ul>
+  </div>
+}

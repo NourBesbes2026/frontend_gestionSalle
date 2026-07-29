@@ -1,0 +1,438 @@
+:host {
+  --mr-primary: var(--color-primary);
+  --mr-primary-soft: color-mix(in srgb, var(--color-primary) 12%, white);
+  --mr-primary-hover: color-mix(in srgb, var(--color-primary) 88%, black);
+  --mr-ink: var(--color-ink);
+  --mr-ink-soft: var(--color-ink-soft, var(--color-slate));
+  --mr-slate: var(--color-slate);
+  --mr-border: var(--color-border);
+  --mr-danger-bg: var(--color-danger-bg);
+  --mr-danger: var(--color-primary);
+  --mr-radius: var(--radius-md);
+  --mr-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.05);
+
+  // Teintes sémantiques pour la grille de disponibilité.
+  // Si ton app définit déjà --color-success / --color-warning (ex. pour app-status-badge),
+  // elles seront utilisées automatiquement ; sinon un vert/ambre neutre sert de repli.
+  --mr-success: var(--color-success, #15803D);
+  --mr-success-bg: var(--color-success-bg, #E7F6EC);
+  --mr-warning: var(--color-warning, #B45309);
+  --mr-warning-bg: var(--color-warning-bg, #FEF6E7);
+
+  display: block;
+  color: var(--mr-ink);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  &__title {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--mr-primary-soft);
+    color: var(--mr-primary);
+  }
+
+  h1 {
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 2px;
+    color: var(--mr-ink);
+  }
+
+  .text-muted {
+    font-size: 13.5px;
+    color: var(--mr-slate);
+  }
+}
+
+.reservation-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 440px) 1fr;
+  align-items: start;
+  gap: 20px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--mr-border);
+  border-radius: var(--mr-radius);
+  box-shadow: var(--mr-shadow);
+}
+
+.form-card {
+  padding: 28px;
+}
+
+.field {
+  margin-bottom: 16px;
+
+  label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--mr-ink-soft);
+    margin-bottom: 6px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    font-size: 13.5px;
+    color: var(--mr-ink);
+    padding: 10px 12px;
+    border: 1px solid var(--mr-border);
+    border-radius: 9px;
+    background: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--mr-primary);
+      box-shadow: 0 0 0 3px var(--mr-primary-soft);
+    }
+  }
+}
+
+.form-card__row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+
+  @media (max-width: 560px) { grid-template-columns: 1fr; }
+}
+
+.form-card__recurrence {
+  grid-template-columns: 1fr 1fr;
+}
+
+.form-card__hint {
+  font-size: 12.5px;
+  color: var(--mr-slate);
+  margin-top: -8px;
+  margin-bottom: 14px;
+}
+
+.form-card__checkbox {
+  margin-bottom: 8px;
+}
+
+.form-card__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--mr-ink);
+  cursor: pointer;
+
+  input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--mr-primary);
+  }
+}
+
+.form-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--mr-border);
+}
+
+.conflict-alert {
+  background: var(--mr-danger-bg);
+  border: 1px solid color-mix(in srgb, var(--mr-danger) 25%, transparent);
+  border-radius: var(--mr-radius);
+  padding: 16px;
+  margin-bottom: 18px;
+
+  h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--mr-danger);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-size: 13px;
+    color: var(--mr-ink-soft);
+    margin-bottom: 6px;
+  }
+}
+
+.conflict-alert__label {
+  font-weight: 600;
+  color: var(--mr-ink) !important;
+  margin-top: 10px !important;
+}
+
+.conflict-alert__suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+// ---- Calendrier de disponibilité ----
+
+.calendar-card {
+  padding: 22px;
+  min-width: 0; // permet à la grille de scroller sans faire déborder la colonne
+}
+
+.calendar-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.calendar-card__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mr-primary);
+
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--mr-ink);
+  }
+}
+
+.calendar-card__nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-card__date-input {
+  font-size: 13px;
+  padding: 7px 10px;
+  border: 1px solid var(--mr-border);
+  border-radius: 8px;
+  color: var(--mr-ink);
+  background: #fff;
+
+  &:focus {
+    outline: none;
+    border-color: var(--mr-primary);
+    box-shadow: 0 0 0 3px var(--mr-primary-soft);
+  }
+}
+
+.calendar-card__date-label {
+  font-size: 12.5px;
+  color: var(--mr-slate);
+  margin: 4px 0 16px;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--mr-border);
+  background: #fff;
+  color: var(--mr-ink-soft);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--mr-border) 30%, white);
+  }
+}
+
+.calendar-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--mr-border);
+  border-radius: var(--mr-radius);
+}
+
+.calendar-grid {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  thead th {
+    padding: 10px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--mr-slate);
+    background: color-mix(in srgb, var(--mr-border) 40%, white);
+    border-bottom: 1px solid var(--mr-border);
+    white-space: nowrap;
+  }
+
+  tbody td {
+    padding: 6px;
+    border-bottom: 1px solid var(--mr-border);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+}
+
+.calendar-grid__salle-col {
+  text-align: left;
+  padding-left: 14px !important;
+  position: sticky;
+  left: 0;
+  background: #fff;
+  min-width: 140px;
+
+  strong {
+    display: block;
+    color: var(--mr-ink);
+    font-size: 13px;
+  }
+}
+
+.calendar-grid__capacite {
+  font-size: 11.5px;
+  color: var(--mr-slate);
+}
+
+.creneau {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  min-width: 76px;
+  padding: 8px 4px;
+  border-radius: 8px;
+  border: none;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.1s ease, transform 0.05s ease;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:not(:disabled):hover {
+    filter: brightness(0.97);
+  }
+
+  &:not(:disabled):active {
+    transform: scale(0.98);
+  }
+}
+
+.creneau--disponible {
+  background: var(--mr-success-bg);
+  color: var(--mr-success);
+}
+
+.creneau--occupee {
+  background: var(--mr-danger-bg);
+  color: var(--mr-danger);
+}
+
+.creneau--maintenance {
+  background: var(--mr-warning-bg);
+  color: var(--mr-warning);
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mr-border);
+  font-size: 12.5px;
+}
+
+.calendar-legend__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-legend__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.calendar-legend__item--disponible .calendar-legend__dot { background: var(--mr-success); }
+.calendar-legend__item--occupee .calendar-legend__dot { background: var(--mr-danger); }
+.calendar-legend__item--maintenance .calendar-legend__dot { background: var(--mr-warning); }
+
+// ---- Boutons ----
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.05s ease;
+  white-space: nowrap;
+
+  &:active { transform: translateY(1px); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.btn--primary {
+  background: var(--mr-primary);
+  color: #fff;
+
+  &:hover:not(:disabled) { background: var(--mr-primary-hover); }
+}
+
+.btn--secondary {
+  background: #fff;
+  color: var(--mr-ink-soft);
+  border-color: var(--mr-border);
+
+  &:hover:not(:disabled) { background: color-mix(in srgb, var(--mr-border) 30%, white); }
+}
+
+.btn--sm {
+  padding: 6px 12px;
+  font-size: 12.5px;
+}

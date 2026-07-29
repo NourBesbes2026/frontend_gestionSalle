@@ -1,0 +1,86 @@
+<div class="page-header">
+  <div>
+    <h1>Réservations</h1>
+    <p class="text-muted">
+      Consultez, validez ou refusez les demandes de réservation.
+      @if (enAttenteCount() > 0) {
+        <strong class="text-primary">{{ enAttenteCount() }} en attente de validation</strong>
+      }
+    </p>
+  </div>
+</div>
+
+<div class="toolbar card">
+  <select [ngModel]="statutFilter()" (ngModelChange)="statutFilter.set($event); fetchReservations()">
+    <option value="">Tous les statuts</option>
+    @for (statut of statutOptions; track statut) {
+      <option [value]="statut">{{ statutLabels[statut] }}</option>
+    }
+  </select>
+
+  <label class="toolbar__date-label">
+    Du
+    <input type="date" [ngModel]="dateDebut()" (ngModelChange)="dateDebut.set($event); fetchReservations()" />
+  </label>
+
+  <label class="toolbar__date-label">
+    Au
+    <input type="date" [ngModel]="dateFin()" (ngModelChange)="dateFin.set($event); fetchReservations()" />
+  </label>
+</div>
+
+@if (loading()) {
+  <p class="text-muted">Chargement des réservations…</p>
+} @else if (!reservations().length) {
+  <div class="empty-state card">
+    <h3>Aucune réservation trouvée</h3>
+    <p>Ajustez vos filtres pour voir d'autres résultats.</p>
+  </div>
+} @else {
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Salle</th>
+          <th>Date</th>
+          <th>Créneau</th>
+          <th>Sujet</th>
+          <th>Type</th>
+          <th>Demandeur</th>
+          <th>Statut</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of reservations(); track r.id) {
+          <tr>
+            <td><strong>{{ r.salle_nom }}</strong></td>
+            <td>{{ r.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ r.heure_debut }} – {{ r.heure_fin }}</td>
+            <td>{{ r.sujet }}</td>
+            <td>{{ typeReunionLabels[r.type_reunion] }}</td>
+            <td>{{ r.user_prenom }} {{ r.user_nom }}</td>
+            <td><app-status-badge [text]="statutLabels[r.statut]" [toneName]="tone(r.statut)" /></td>
+            <td>
+              @if (r.statut === 'EN_ATTENTE') {
+                <div class="row-actions">
+                  <button type="button" class="btn btn--primary" (click)="valider(r)">Valider</button>
+                  <button type="button" class="btn btn--danger" (click)="askRefuser(r)">Refuser</button>
+                </div>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<app-confirm-dialog
+  [open]="confirmRefusOpen()"
+  title="Refuser la réservation"
+  message="L'utilisateur sera informé du refus de sa demande. Continuer ?"
+  confirmLabel="Refuser"
+  (confirm)="confirmRefuser()"
+  (cancel)="cancelRefuser()"
+/>

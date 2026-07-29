@@ -1,0 +1,10 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+
+  h1 { font-size: 22px; margin-bottom: 4px; }
+}

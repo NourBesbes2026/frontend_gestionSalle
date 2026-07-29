@@ -1,0 +1,144 @@
+<div class="app-shell">
+
+  <!-- Barre latérale -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+           <img src="../../../assets/images/logo_blanc.png" alt="Sopra HR Software" class="login__logo"/>
+     
+    </div>
+
+    <nav class="sidebar-nav">
+    
+      <a routerLink="/salles" class="alignement"><i class="ti ti-door sidebar__icon" ></i><span class="nav-item " style=" font-style: italic;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Salles</span></a>
+      <a routerLink="/employe/reservations/nouvelle" class="alignement"  ><i class="ti ti-calendar-event sidebar__icon"></i><span class="nav-item ">Réserver une salle</span></a>
+      <a routerLink="/employe/reservations" class="alignement"  ><i class="ti ti-calendar-event sidebar__icon"></i><span class="nav-item ">Mes réservations</span></a>
+      <a routerLink="/employe/problemes" class="alignement"><i class="ti ti-alert-triangle sidebar__icon"></i><span class="nav-item ">Signaler probleme</span></a>
+      <a  routerLink="/employe/avis"  class="alignement"><i class="ti ti-star sidebar__icon"></i><span class="nav-item ">Donner un avis</span></a>
+      <a routerLink="/profil" class="alignement"><i class="ti ti-user sidebar__icon"></i><span class="nav-item ">Profil</span></a>
+    </nav>
+  </aside>
+
+  <!-- Contenu principal -->
+  <div class="main">
+
+    <!-- Barre du haut : adaptée à l'utilisateur connecté -->
+    <header class="topbar">
+      <div class="topbar-title">
+        <span class="topbar-icon"><i class="ti ti-user-circle"></i></span>
+        <div>
+          <h1>Informations personnelles</h1>
+          <p>Votre profil</p>
+        </div>
+      </div>
+
+      <div class="topbar-actions" *ngIf="user">
+           <div class="topbar__user">
+        
+        <button type="button" class="btn btn--ghost" (click)="logout()">Déconnexion</button>
+      </div>
+      </div>
+    </header>
+
+    <!-- Contenu -->
+    <div class="content">
+
+      <p class="state-message" *ngIf="isLoading && !user">Chargement du profil...</p>
+      <p class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <div class="page-grid" *ngIf="user">
+
+        <!-- Colonne gauche : carte profil -->
+        <section class="card profile-card">
+          <div class="avatar-xl">{{ initials() }}</div>
+          <h2>{{ user.prenom }} {{ user.nom }}</h2>
+          <span class="role-pill" [class.admin]="user.role === 'ADMIN'">
+            <i class="ti ti-shield"></i> {{ roleLabel(user.role) }}
+          </span>
+
+          <div class="profile-fields">
+            <div>
+              <label>Prénom</label>
+              <div class="value">{{ user.prenom }}</div>
+            </div>
+            <div>
+              <label>Nom</label>
+              <div class="value">{{ user.nom }}</div>
+            </div>
+            <div>
+              <label>Adresse email</label>
+              <div class="value">{{ user.email }}</div>
+            </div>
+            <div>
+              <label>Rôle</label>
+              <div class="value">{{ roleLabel(user.role) }}</div>
+            </div>
+          </div>
+
+          <button class="logout-btn" (click)="logout()">
+            <i class="ti ti-logout"></i> Se déconnecter
+          </button>
+        </section>
+
+        <!-- Colonne droite -->
+        <div class="right-column">
+
+          <!-- Changement de mot de passe -->
+          <section class="card">
+            <div class="card-title">
+              <span class="card-icon"><i class="ti ti-lock"></i></span>
+              <h3>Sécurité du compte</h3>
+            </div>
+
+            <form (ngSubmit)="changePassword()" novalidate>
+              <div class="form-group">
+                <label for="currentPassword">Mot de passe actuel</label>
+                <input id="currentPassword" name="currentPassword" type="password"
+                       [(ngModel)]="passwordForm.currentPassword" placeholder="••••••••">
+              </div>
+              <div class="form-group">
+                <label for="newPassword">Nouveau mot de passe</label>
+                <input id="newPassword" name="newPassword" type="password"
+                       [(ngModel)]="passwordForm.newPassword" placeholder="••••••••">
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirmer le nouveau mot de passe</label>
+                <input id="confirmPassword" name="confirmPassword" type="password"
+                       [(ngModel)]="passwordForm.confirmPassword" placeholder="••••••••">
+              </div>
+
+              <p class="message error" *ngIf="passwordError">{{ passwordError }}</p>
+              <p class="message success" *ngIf="passwordSuccess">{{ passwordSuccess }}</p>
+
+              <button type="submit" class="save-btn" [disabled]="isSavingPassword">
+                <i class="ti ti-device-floppy"></i>
+                {{ isSavingPassword ? 'Mise à jour...' : 'Mettre à jour le mot de passe' }}
+              </button>
+            </form>
+          </section>
+
+          <!-- À propos -->
+          <section class="card about-card">
+            <div class="card-title">
+              <span class="card-icon"><i class="ti ti-building"></i></span>
+              <h3>À propos de Sopra HR Software Tunisie</h3>
+            </div>
+
+            <p class="about-text">
+              Filiale du groupe Sopra Steria, Sopra HR Software Tunisie développe des
+              solutions logicielles RH pour accompagner la transformation digitale
+              des entreprises en Tunisie et à l'international.
+            </p>
+
+            <div class="about-details">
+              <div class="about-item"><i class="ti ti-map-pin"></i> Les Berges du Lac, Tunis, Tunisie</div>
+              <div class="about-item"><i class="ti ti-world"></i> www.soprahr.com</div>
+              <div class="about-item"><i class="ti ti-mail"></i> contact.tunisie@soprahr.com</div>
+            </div>
+          </section>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

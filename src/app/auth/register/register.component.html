@@ -1,0 +1,71 @@
+<div class="login">
+  <div class="login__panel">
+    <div class="login__brand">
+       <img
+    src="../../../assets/images/LOGO.png" 
+    alt="Sopra HR Software"
+    class="login__logo"
+  />
+    </div>
+
+    <h1 class="login__title">Créer un compte employé</h1>
+    <p class="login__subtitle">Réservez des salles, signalez des problèmes et donnez votre avis après utilisation.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login__form" novalidate>
+      <div class="dialog__row">
+        <div class="field">
+          <label for="prenom">Prénom</label>
+          <input id="prenom" type="text" formControlName="prenom" autocomplete="given-name" />
+        </div>
+        <div class="field">
+          <label for="nom">Nom</label>
+          <input id="nom" type="text" formControlName="nom" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="email">Adresse e-mail</label>
+        <input id="email" type="email" formControlName="email" autocomplete="username" />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <span class="field__error">Adresse e-mail valide requise.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" formControlName="password" autocomplete="new-password" />
+        @if (form.controls.password.invalid && form.controls.password.touched) {
+          <span class="field__error">6 caractères minimum.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Confirmer le mot de passe</label>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword" autocomplete="new-password" />
+        @if (form.errors?.['mismatch'] && form.controls.confirmPassword.touched) {
+          <span class="field__error">Les mots de passe ne correspondent pas.</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--primary login__submit" [disabled]="loading()">
+        @if (loading()) { Création en cours… } @else { Créer mon compte }
+      </button>
+
+      <p class="login__register-link">
+        Déjà un compte ? <a routerLink="/connexion">Se connecter</a>
+      </p>
+    </form>
+  </div>
+
+  <div class="login__showcase" aria-hidden="true">
+    <div class="login__showcase-content">
+      <p class="login__showcase-eyebrow">Espace employé</p>
+      <h2>Réservez une salle en quelques clics</h2>
+      <ul class="login__showcase-list">
+        <li>Réservation simple ou récurrente</li>
+        <li>Suivi en temps réel du statut de vos demandes</li>
+        <li>Signalement rapide des problèmes rencontrés</li>
+      </ul>
+    </div>
+  </div>
+</div>

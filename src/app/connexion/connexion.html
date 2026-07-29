@@ -1,0 +1,119 @@
+<div class="login-page">
+
+  <!-- Panneau de marque -->
+  <aside class="brand-panel">
+    <div class="brand-top">
+      <div class="brand-logo">
+          <img src="../../../assets/images/logo_blanc.png" alt="Sopra HR Software" class="login__logo" />
+      </div>
+      
+    </div>
+
+    <div class="brand-body">
+    
+      <p>La plateforme de réservation de salles et de bureaux pour toutes les équipes.</p>
+    </div>
+
+    <ul class="availability-grid" aria-hidden="true">
+      <li class="cell"></li><li class="cell"></li><li class="cell soon"></li><li class="cell"></li><li class="cell"></li><li class="cell busy"></li>
+      <li class="cell"></li><li class="cell busy"></li><li class="cell"></li><li class="cell"></li><li class="cell soon"></li><li class="cell"></li>
+      <li class="cell soon"></li><li class="cell"></li><li class="cell"></li><li class="cell busy"></li><li class="cell"></li><li class="cell"></li>
+      <li class="cell"></li><li class="cell"></li><li class="cell soon"></li><li class="cell"></li><li class="cell busy"></li><li class="cell"></li>
+      <li class="cell busy"></li><li class="cell"></li><li class="cell"></li><li class="cell soon"></li><li class="cell"></li><li class="cell"></li>
+    </ul>
+    <div class="grid-legend">
+      <span><i class="dot"></i>Libre</span>
+      <span><i class="dot soon"></i>Bientôt réservé</span>
+      <span><i class="dot busy"></i>Occupé</span>
+    </div>
+  </aside>
+
+  <!-- Panneau de connexion -->
+  <main class="form-panel">
+    <div class="form-wrap">
+
+      <div class="brand-logo brand-logo--mobile">
+        <svg width="24" height="24" viewBox="0 0 40 40" fill="none">
+          <path d="M6 14C6 14 14 10 20 14C26 18 34 14 34 14" stroke="#D70C1E" stroke-width="4" stroke-linecap="round"/>
+          <path d="M6 24C6 24 14 20 20 24C26 28 34 24 34 24" stroke="#EF8302" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+        <div class="brand-wordmark">
+          <span class="brand-name">sopra hr</span>
+          <span class="brand-sub">SOFTWARE</span>
+        </div>
+      </div>
+
+      <div class="form-header">
+        <h2>Connexion</h2>
+        <p>Accédez à votre espace de réservation.</p>
+      </div>
+
+      <!-- Sélecteur de rôle -->
+      <div class="role-switch" role="tablist">
+        <span class="role-indicator" [class.right]="role === 'rh'"></span>
+        <button
+          type="button"
+          role="tab"
+          class="role-tab"
+          [class.active]="role === 'employe'"
+          [attr.aria-selected]="role === 'employe'"
+          (click)="selectRole('employe')">
+          Employé
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="role-tab"
+          [class.active]="role === 'rh'"
+          [attr.aria-selected]="role === 'rh'"
+          (click)="selectRole('rh')">
+          Administrateur RH
+        </button>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="form-group">
+          <label for="email">Identifiant professionnel</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            [(ngModel)]="email"
+            placeholder="prenom.nom@soprahr.com"
+            autocomplete="username"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de passe</label>
+          <div class="password-field">
+            <input
+              id="password"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required>
+            <button type="button" class="visibility" (click)="togglePassword()">
+              {{ showPassword ? 'Masquer' : 'Afficher' }}
+            </button>
+          </div>
+        </div>
+
+        <p class="error-message" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <button type="submit" class="submit-btn" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Se connecter</span>
+          <span *ngIf="isLoading">Connexion…</span>
+        </button>
+
+       
+
+      </form>
+
+    </div>
+  </main>
+
+</div>

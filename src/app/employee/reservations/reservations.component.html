@@ -1,0 +1,61 @@
+<div class="page-header">
+  <div>
+    <h1>Mes réservations</h1>
+    <p class="text-muted">Historique et statut de vos demandes de réservation.</p>
+  </div>
+  <a routerLink="/employe/reservations/nouvelle" class="btn btn--primary">+ Réserver une salle</a>
+</div>
+
+@if (loading()) {
+  <p class="text-muted">Chargement de vos réservations…</p>
+} @else if (!reservations().length) {
+  <div class="empty-state card">
+    <h3>Aucune réservation pour le moment</h3>
+    <p>Réservez une salle de formation en quelques clics.</p>
+    <a routerLink="/employe/reservations/nouvelle" class="btn btn--primary" style="margin-top: 12px;">
+      Réserver une salle
+    </a>
+  </div>
+} @else {
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Salle</th>
+          <th>Date</th>
+          <th>Créneau</th>
+          <th>Sujet</th>
+          <th>Type</th>
+          <th>Statut</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (r of reservations(); track r.id) {
+          <tr>
+            <td><strong>{{ r.salle_nom }}</strong></td>
+            <td>{{ r.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ r.heure_debut }} – {{ r.heure_fin }}</td>
+            <td>{{ r.sujet }}</td>
+            <td>{{ typeReunionLabels[r.type_reunion] }}</td>
+            <td><app-status-badge [text]="statutLabels[r.statut]" [toneName]="tone(r.statut)" /></td>
+            <td>
+              @if (canCancel(r)) {
+                <button type="button" class="btn btn--danger" (click)="askCancel(r)">Annuler</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<app-confirm-dialog
+  [open]="confirmCancelOpen()"
+  title="Annuler la réservation"
+  message="Voulez-vous vraiment annuler cette réservation ?"
+  confirmLabel="Annuler la réservation"
+  (confirm)="confirmCancel()"
+  (cancel)="cancelCancel()"
+/>

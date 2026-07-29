@@ -1,0 +1,13 @@
+@use '../login/login.component.scss';
+
+.dialog__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.login__logo {
+  width: 180px;
+  height: auto;
+  object-fit: contain;
+}

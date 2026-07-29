@@ -1,0 +1,63 @@
+<div class="page-header">
+  <div>
+    <h1>Problèmes signalés</h1>
+    <p class="text-muted">Suivez et traitez les incidents remontés par les employés.</p>
+  </div>
+</div>
+
+<div class="toolbar card">
+  <select [ngModel]="statutFilter()" (ngModelChange)="statutFilter.set($event); fetchProblemes()">
+    <option value="">Tous les statuts</option>
+    @for (statut of statutOptions; track statut) {
+      <option [value]="statut">{{ statutLabels[statut] }}</option>
+    }
+  </select>
+</div>
+
+@if (loading()) {
+  <p class="text-muted">Chargement des signalements…</p>
+} @else if (!problemes().length) {
+  <div class="empty-state card">
+    <h3>Aucun problème signalé</h3>
+    <p>Les incidents remontés par les employés apparaîtront ici.</p>
+  </div>
+} @else {
+  <div class="table-scroll">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Salle</th>
+          <th>Type</th>
+          <th>Commentaire</th>
+          <th>Date</th>
+          <th>Signalé par</th>
+          <th>Statut</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (p of problemes(); track p.id) {
+          <tr>
+            <td><strong>{{ p.salle_nom }}</strong></td>
+            <td>{{ typeLabels[p.type_probleme] }}</td>
+            <td class="problemes__comment">{{ p.commentaire }}</td>
+            <td>{{ p.date | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ p.user_prenom }} {{ p.user_nom }}</td>
+            <td><app-status-badge [text]="statutLabels[p.statut]" [toneName]="tone(p.statut)" /></td>
+            <td>
+              <select
+                class="problemes__statut-select"
+                [ngModel]="p.statut"
+                (ngModelChange)="updateStatut(p, $event)"
+              >
+                @for (statut of statutOptions; track statut) {
+                  <option [value]="statut">{{ statutLabels[statut] }}</option>
+                }
+              </select>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

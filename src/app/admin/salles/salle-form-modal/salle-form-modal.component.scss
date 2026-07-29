@@ -1,0 +1,87 @@
+.dialog-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(33, 31, 31, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.dialog {
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 26px;
+  max-width: 460px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+
+  h3 { font-size: 17px; }
+}
+
+.dialog__close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: var(--color-slate);
+  line-height: 1;
+}
+
+.dialog__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.dialog__equip-input {
+  display: flex;
+  gap: 8px;
+
+  input { flex: 1; }
+}
+
+.dialog__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 5px 6px 5px 12px;
+  font-size: 12.5px;
+  color: var(--color-ink);
+
+  button {
+    background: none;
+    border: none;
+    color: var(--color-slate);
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px 4px;
+    &:hover { color: var(--color-primary); }
+  }
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}

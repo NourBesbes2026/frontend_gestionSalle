@@ -1,0 +1,69 @@
+@if (open) {
+  <div class="dialog-scrim" (click)="close.emit()">
+    <div class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+      <div class="dialog__header">
+        <h3>{{ salle ? 'Modifier la salle' : 'Ajouter une salle' }}</h3>
+        <button type="button" class="dialog__close" (click)="close.emit()" aria-label="Fermer">&times;</button>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label for="nom">Nom de la salle</label>
+          <input id="nom" type="text" formControlName="nom" placeholder="Ex. Salle Atlas" />
+          @if (form.controls.nom.invalid && form.controls.nom.touched) {
+            <span class="field__error">Le nom est requis.</span>
+          }
+        </div>
+
+        <div class="dialog__row">
+          <div class="field">
+            <label for="capacite">Capacité</label>
+            <input id="capacite" type="number" min="1" formControlName="capacite" />
+            @if (form.controls.capacite.invalid && form.controls.capacite.touched) {
+              <span class="field__error">Capacité invalide.</span>
+            }
+          </div>
+
+          <div class="field">
+            <label for="statut">Statut</label>
+            <select id="statut" formControlName="statut">
+              @for (statut of statutOptions; track statut) {
+                <option [value]="statut">{{ statut === 'DISPONIBLE' ? 'Disponible' : statut === 'RESERVEE' ? 'Réservée' : statut === 'EN_ATTENTE' ? 'En attente' : 'En maintenance' }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="equipement">Équipements</label>
+          <div class="dialog__equip-input">
+            <input
+              id="equipement"
+              type="text"
+              [(ngModel)]="equipementInput"
+              [ngModelOptions]="{ standalone: true }"
+              placeholder="Ex. Vidéoprojecteur"
+              (keydown.enter)="$event.preventDefault(); addEquipement()"
+            />
+            <button type="button" class="btn btn--secondary" (click)="addEquipement()">Ajouter</button>
+          </div>
+          <div class="dialog__chips">
+            @for (item of form.controls.equipements.value; track item) {
+              <span class="chip">
+                {{ item }}
+                <button type="button" (click)="removeEquipement(item)" aria-label="Retirer">&times;</button>
+              </span>
+            }
+          </div>
+        </div>
+
+        <div class="dialog__actions">
+          <button type="button" class="btn btn--secondary" (click)="close.emit()">Annuler</button>
+          <button type="submit" class="btn btn--primary" [disabled]="saving">
+            {{ saving ? 'Enregistrement…' : (salle ? 'Enregistrer' : 'Créer la salle') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+}

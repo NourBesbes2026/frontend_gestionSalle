@@ -1,0 +1,233 @@
+<div class="page-header">
+  <div class="page-header__title">
+    <span class="page-header__icon" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M3 9.5H21" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M8 3V6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M16 3V6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <div>
+      <h1>Réserver une salle</h1>
+      <p class="text-muted">Choisissez un créneau ; l'administrateur validera votre demande.</p>
+    </div>
+  </div>
+  <a routerLink="/employe/reservations" class="btn btn--secondary">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Retour à mes réservations
+  </a>
+</div>
+
+<div class="reservation-layout">
+  <!-- Formulaire -->
+  <div class="card form-card">
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="field">
+        <label for="salle_id">Salle</label>
+        @if (loadingSalles()) {
+          <p class="text-muted">Chargement des salles disponibles…</p>
+        } @else {
+          <select id="salle_id" formControlName="salle_id">
+            <option [value]="0" disabled>Sélectionnez une salle</option>
+            @for (salle of salles(); track salle.id) {
+              <option [value]="salle.id">{{ salle.nom }} — {{ salle.capacite }} pers.</option>
+            }
+          </select>
+        }
+        @if (selectedSalle(); as s) {
+          @if (s.equipements.length) {
+            <p class="form-card__hint">Équipements : {{ s.equipements.join(', ') }}</p>
+          }
+        }
+      </div>
+
+      <div class="form-card__row">
+        <div class="field">
+          <label for="date">Date</label>
+          <input id="date" type="date" formControlName="date" />
+        </div>
+        <div class="field">
+          <label for="heure_debut"> début</label>
+          <input id="heure_debut" type="time" formControlName="heure_debut" />
+        </div>
+        <div class="field">
+          <label for="heure_fin"> fin</label>
+          <input id="heure_fin" type="time" formControlName="heure_fin" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="sujet">Sujet</label>
+        <input id="sujet" type="text" formControlName="sujet" placeholder="Ex. Formation Angular avancé" />
+      </div>
+
+      <div class="field">
+        <label for="type_reunion">Type de réunion</label>
+        <select id="type_reunion" formControlName="type_reunion">
+          @for (type of typeReunionOptions; track type) {
+            <option [value]="type">{{ typeReunionLabels[type] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field form-card__checkbox">
+        <label class="form-card__checkbox-label">
+          <input type="checkbox" formControlName="est_recurrente" />
+          Réservation récurrente
+        </label>
+      </div>
+
+      @if (form.controls.est_recurrente.value) {
+        <div class="form-card__row form-card__recurrence">
+          <div class="field">
+            <label for="frequence">Fréquence</label>
+            <select id="frequence" formControlName="frequence">
+              <option value="WEEKLY">Chaque semaine</option>
+              <option value="MONTHLY">Chaque mois</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="occurrences">Nombre d'occurrences</label>
+            <input id="occurrences" type="number" min="1" max="52" formControlName="occurrences" />
+          </div>
+        </div>
+        <p class="form-card__hint">
+          {{ form.controls.occurrences.value }} réservations seront créées, à partir de la date choisie.
+        </p>
+      }
+
+      @if (conflit(); as c) {
+        <div class="conflict-alert">
+          <h4>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M12 9V13M12 17H12.01M10.29 3.86L1.82 18A2 2 0 003.53 21H20.47A2 2 0 0022.18 18L13.71 3.86A2 2 0 0010.29 3.86Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Conflit de réservation
+          </h4>
+          <p>Cette salle est déjà réservée sur ce créneau le {{ c.creneau_en_conflit.date | date: 'dd/MM/yyyy' }}.</p>
+          @if (c.salle_alternatives.length) {
+            <p class="conflict-alert__label">Salles disponibles sur ce créneau :</p>
+            <div class="conflict-alert__suggestions">
+              @for (alt of c.salle_alternatives; track alt.id) {
+                <button type="button" class="btn btn--secondary" (click)="applySuggestion(alt.id)">
+                  {{ alt.nom }} ({{ alt.capacite }} pers.)
+                </button>
+              }
+            </div>
+          } @else {
+            <p>Aucune autre salle disponible pour ce créneau et cette capacité. Essayez un autre horaire.</p>
+          }
+        </div>
+      }
+
+      <div class="form-card__actions">
+        <a routerLink="/employe/reservations" class="btn btn--secondary">Annuler</a>
+        <button type="submit" class="btn btn--primary" [disabled]="submitting()">
+          {{ submitting() ? 'Envoi en cours…' : 'Envoyer la demande' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Calendrier de disponibilité -->
+  <div class="card calendar-card">
+    <div class="calendar-card__header">
+      <div class="calendar-card__title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M3 9.5H21" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <h2>Disponibilité des salles</h2>
+      </div>
+
+      <div class="calendar-card__nav">
+        <button type="button" class="icon-btn" (click)="previousDay()" aria-label="Jour précédent">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <input
+          type="date"
+          class="calendar-card__date-input"
+          [value]="calendarDate()"
+          (change)="onCalendarDateChange($event)"
+          [attr.aria-label]="calendarDateLabel()"
+        />
+        <button type="button" class="icon-btn" (click)="nextDay()" aria-label="Jour suivant">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button type="button" class="btn btn--secondary btn--sm" (click)="goToToday()" [disabled]="isToday()">
+          Aujourd'hui
+        </button>
+      </div>
+    </div>
+
+    <p class="calendar-card__date-label">{{ calendarDateLabel() }}</p>
+
+    @if (loadingPlanning()) {
+      <p class="text-muted">Chargement du planning…</p>
+    } @else if (!planningRows().length) {
+      <p class="text-muted">Aucune salle à afficher.</p>
+    } @else {
+      <div class="calendar-scroll">
+        <table class="calendar-grid">
+          <thead>
+            <tr>
+              <th class="calendar-grid__salle-col">Salles</th>
+              @for (heure of HEURES; track heure) {
+                <th>{{ heure }}</th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of planningRows(); track row.salle.id) {
+              <tr>
+                <td class="calendar-grid__salle-col">
+                  <strong>{{ row.salle.nom }}</strong>
+                  <span class="calendar-grid__capacite">{{ row.salle.capacite }} places</span>
+                </td>
+                @for (c of row.creneaux; track c.heure) {
+                  <td>
+                    <button
+                      type="button"
+                      class="creneau creneau--{{ c.statut | lowercase }}"
+                      [disabled]="c.statut !== 'DISPONIBLE'"
+                      (click)="selectCreneau(row.salle, c.heure, c.statut)"
+                    >
+                      @if (c.statut === 'DISPONIBLE') {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span>Disponible</span>
+                      } @else if (c.statut === 'OCCUPEE') {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="3.2" stroke="currentColor" stroke-width="1.8"/><path d="M5 20C5 16.5 8 14.5 12 14.5C16 14.5 19 16.5 19 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+                        <span>Occupée</span>
+                      } @else {
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 21L8.5 15.5M14.5 6.5L21 13a2.5 2.5 0 01-3.5 3.5L11 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span>Maintenance</span>
+                      }
+                    </button>
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="calendar-legend">
+        <span class="calendar-legend__item calendar-legend__item--disponible">
+          <span class="calendar-legend__dot"></span>
+          <strong>Disponible</strong>&nbsp;<span class="text-muted">La salle est libre</span>
+        </span>
+        <span class="calendar-legend__item calendar-legend__item--occupee">
+          <span class="calendar-legend__dot"></span>
+          <strong>Occupée</strong>&nbsp;<span class="text-muted">La salle est déjà réservée</span>
+        </span>
+        <span class="calendar-legend__item calendar-legend__item--maintenance">
+          <span class="calendar-legend__dot"></span>
+          <strong>Maintenance</strong>&nbsp;<span class="text-muted">La salle est en maintenance</span>
+        </span>
+      </div>
+    }
+  </div>
+</div>

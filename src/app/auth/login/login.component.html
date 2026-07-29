@@ -1,0 +1,73 @@
+<div class="login">
+  <div class="login__panel">
+    <div class="login__brand">
+       <img 
+    src="../../../assets/images/LOGO.png" 
+    alt="Sopra HR Software"
+    class="login__logo" />
+    </div>
+
+    <h1 class="login__title">Gestion des salles de formation</h1>
+    <p class="login__subtitle">Espace administrateur — connectez-vous pour piloter les salles, réservations et signalements.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="login__form" novalidate>
+      <div class="field">
+        <label for="email">Adresse e-mail</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="prenom.nom@soprahr.com"
+          autocomplete="username"
+        />
+        @if (form.controls.email.invalid && form.controls.email.touched) {
+          <span class="field__error">Adresse e-mail valide requise.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Mot de passe</label>
+        <div class="login__password-wrapper">
+          <input
+            id="password"
+            [type]="showPassword() ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="login__toggle-visibility"
+            (click)="showPassword.set(!showPassword())"
+            [attr.aria-label]="showPassword() ? 'Masquer le mot de passe' : 'Afficher le mot de passe'"
+          >
+            {{ showPassword() ? 'Masquer' : 'Afficher' }}
+          </button>
+        </div>
+        @if (form.controls.password.invalid && form.controls.password.touched) {
+          <span class="field__error">Mot de passe requis (6 caractères minimum).</span>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--primary login__submit" [disabled]="loading()">
+        @if (loading()) { Connexion en cours… } @else { Se connecter }
+      </button>
+
+      <p class="login__register-link">
+        Pas encore de compte ? <a routerLink="/inscription">Créer un compte employé</a>
+      </p>
+    </form>
+  </div>
+
+  <div class="login__showcase" aria-hidden="true">
+    <div class="login__showcase-content">
+      <p class="login__showcase-eyebrow">Plateforme interne</p>
+      <h2>Centralisez la gestion de vos salles de formation</h2>
+      <ul class="login__showcase-list">
+        <li>Validez les réservations et résolvez les conflits en un clic</li>
+        <li>Suivez les problèmes signalés salle par salle</li>
+        <li>Visualisez le taux d'occupation en temps réel</li>
+      </ul>
+    </div>
+  </div>
+</div>

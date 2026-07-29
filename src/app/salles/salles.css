@@ -1,0 +1,611 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+* { box-sizing: border-box; }
+
+.app-shell {
+  display: flex;
+  gap: 20px;
+  min-height: 100vh;
+  padding: 0px; 
+  background: #FAF8F6;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #201A17;
+}
+
+/* ==========================================================================
+   Barre latérale
+   ========================================================================== */
+
+.sidebar {
+  width: 240px;
+  background:
+    radial-gradient(140% 120% at 100% 0%, rgba(239, 131, 2, 0.30) 0%, rgba(239, 131, 2, 0) 45%),
+    linear-gradient(165deg, #1C1310 0%, #2A2019 55%, #A10916 140%);
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding: 18px 14px;
+  flex-shrink: 0;
+  border-radius: 16px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 20px;
+}
+
+.sidebar-brand-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #FFFFFF;
+  flex: 1;
+}
+
+.sidebar .icon-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.nav-item {
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+  font-size: 0.87rem;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+  font-style: italic;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.nav-item i {
+  font-size: 18px;
+  width: 20px;
+  text-align: center;
+  
+  
+}
+
+.nav-item:hover {
+  background: linear-gradient(120deg, #D70C1E 0%, #EF8302 100%);
+  color: #FFFFFF;
+  cursor: pointer;
+  width: 170px;
+  
+
+}
+
+.alignement{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 25px;
+  
+}
+
+.nav-item.help {
+  margin-top: auto;
+  color: rgba(255, 255, 255, 0.5);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 16px;
+  margin-top: 12px;
+}
+
+
+.sidebar__icon{
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  cursor: pointer;
+  padding-top: 10px;
+  margin-left:  15px;
+  margin-right: 15px ;
+
+}
+
+/* ==========================================================================
+   Contenu principal
+   ========================================================================== */
+
+.main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ---------- Barre du haut ---------- */
+
+.topbar {
+  background: #FFFFFF;
+  border: 1px solid #ECE6E1;
+  color: #201A17;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-radius: 16px;
+}
+
+.topbar-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.topbar-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #D70C1E 0%, #EF8302 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.topbar-title h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1C1310;
+}
+
+.topbar-title p {
+  font-size: 0.8rem;
+  color: #8C8078;
+  margin: 2px 0 0;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 6px 10px 6px 6px;
+  border-radius: 30px;
+  transition: background 0.15s ease;
+}
+
+.user-menu:hover {
+  background: #FAF8F6;
+}
+
+.user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(120deg, #D70C1E 0%, #EF8302 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.user-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #201A17;
+}
+
+.user-role {
+  font-size: 0.72rem;
+  color: #8C8078;
+}
+
+.topbar-actions > i,
+.user-menu > i {
+  color: #8C8078;
+  font-size: 16px;
+}
+
+/* ---------- Contenu ---------- */
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ==========================================================================
+   Barre de filtres
+   ========================================================================== */
+
+.filters-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  background: #FFFFFF;
+  border: 1px solid #ECE6E1;
+  border-radius: 16px;
+  padding: 18px 22px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 180px;
+}
+
+.filter-group label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #8C8078;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 9px 2px;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.85rem;
+  border: none;
+  border-bottom: 2px solid #ECE6E1;
+  border-radius: 0;
+  background: transparent;
+  color: #201A17;
+  transition: border-color 0.15s ease;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  outline: none;
+  border-bottom-color: #EF8302;
+}
+
+.reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid #ECE6E1;
+  border-radius: 22px;
+  padding: 9px 16px;
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #8C8078;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.reset-btn:hover {
+  border-color: #D70C1E;
+  color: #D70C1E;
+}
+
+.filters-legend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #8C8078;
+}
+
+.filters-legend .dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.filters-legend .dot.dispo { background: #2E7D32; }
+.filters-legend .dot.attente { background: #EF8302; }
+.filters-legend .dot.maint { background: #D70C1E; }
+
+/* ---------- États (chargement / erreur / vide) ---------- */
+
+.state-message {
+  text-align: center;
+  color: #8C8078;
+  font-size: 0.88rem;
+  padding: 30px 0;
+}
+
+.state-message.error {
+  color: #9C1D14;
+}
+
+/* ==========================================================================
+   Grille des salles
+   ========================================================================== */
+
+.salles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 20px;
+}
+
+.salle-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1px solid #ECE6E1;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.salle-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(28, 19, 16, 0.08);
+}
+
+.salle-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #B4ADA6;
+  z-index: 1;
+}
+
+.salle-card.disponible::before { background: #2E7D32; }
+.salle-card.occupee::before { background: #EF8302; }
+.salle-card.maintenance::before { background: #D70C1E; }
+
+
+
+.salle-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.salle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.salle-header h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1C1310;
+}
+
+.badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.badge.disponible {
+  background: #E7F3E8;
+  color: #21601F;
+}
+
+.badge.occupee {
+  background: #FDEFE0;
+  color: #A15A02;
+}
+
+.badge.maintenance {
+  background: #FCEDEC;
+  color: #9C1D14;
+}
+
+.salle-capacity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: #8C8078;
+}
+
+.salle-equipements {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.equip-chip {
+  background: #FAF8F6;
+  border: 1px solid #ECE6E1;
+  border-radius: 6px;
+  padding: 4px 9px;
+  font-size: 0.72rem;
+  color: #6B6259;
+}
+
+.salle-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding: 11px;
+  border-radius: 22px;
+  background: linear-gradient(120deg, #D70C1E 0%, #EF8302 100%);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(215, 12, 30, 0.2);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.salle-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px rgba(215, 12, 30, 0.28);
+}
+
+.salle-action.disabled {
+  background: #ECE6E1;
+  color: #8C8078;
+  box-shadow: none;
+  pointer-events: none;
+}
+
+/* ---------- Accessibilité clavier ---------- */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+a:focus-visible {
+  outline: 2px solid #EF8302;
+  outline-offset: 2px;
+}
+
+/* ============ Responsive ============ */
+
+@media (max-width: 1100px) {
+  .salles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 76px;
+    align-items: center;
+  }
+
+  .sidebar-brand {
+    justify-content: center;
+    padding: 6px 0 20px;
+  }
+
+  .sidebar-brand-name,
+  .nav-item span {
+    display: none;
+  }
+
+  .nav-item {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .nav-item.help {
+    justify-content: center;
+  }
+
+  .topbar-title p {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    flex-direction: column;
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 14px;
+  }
+
+  .sidebar-brand {
+    padding: 0 8px 0 0;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex: 1;
+    overflow-x: auto;
+    gap: 2px;
+  }
+
+  .nav-item {
+    flex-shrink: 0;
+  }
+
+  .nav-item.help {
+    margin-top: 0;
+    border-top: none;
+    padding-top: 12px;
+    padding-left: 12px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .topbar {
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .filters-bar {
+    padding: 16px;
+  }
+
+  .filters-legend {
+    margin-left: 0;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .salles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.login__logo {
+  width: 180px;
+  height: auto;
+  object-fit: contain;
+}

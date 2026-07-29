@@ -1,0 +1,238 @@
+:host {
+  --mr-primary: var(--color-primary);
+  --mr-primary-soft: color-mix(in srgb, var(--color-primary) 12%, white);
+  --mr-primary-soft-2: color-mix(in srgb, var(--color-primary) 22%, white);
+  --mr-ink: var(--color-ink);
+  --mr-ink-soft: var(--color-ink-soft, var(--color-slate));
+  --mr-slate: var(--color-slate);
+  --mr-border: var(--color-border);
+  --mr-bg: var(--color-bg);
+  --mr-radius: var(--radius-md, 12px);
+  --mr-radius-sm: var(--radius-sm, 8px);
+  --mr-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 12px rgba(16, 24, 40, 0.05);
+
+  display: block;
+  color: var(--mr-ink);
+}
+
+.page-header {
+  margin-bottom: 20px;
+
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--mr-ink);
+  }
+
+  .text-muted {
+    font-size: 13.5px;
+    color: var(--mr-slate);
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--mr-border);
+  border-radius: var(--mr-radius);
+  box-shadow: var(--mr-shadow);
+}
+
+.empty-state {
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--mr-slate);
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--mr-ink);
+    margin-bottom: 6px;
+  }
+
+  p {
+    font-size: 13.5px;
+  }
+}
+
+.avis-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 560px) 1fr;
+  align-items: stretch;
+  gap: 20px;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-card {
+  padding: 26px;
+}
+
+.field {
+  margin-bottom: 16px;
+
+  label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--mr-ink-soft);
+    margin-bottom: 6px;
+  }
+
+  select,
+  textarea {
+    width: 100%;
+    font-size: 13.5px;
+    color: var(--mr-ink);
+    padding: 10px 12px;
+    border: 1px solid var(--mr-border);
+    border-radius: 9px;
+    background: #fff;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: var(--mr-primary);
+      box-shadow: 0 0 0 3px var(--mr-primary-soft);
+    }
+  }
+}
+
+.form-card__section-title {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--mr-slate);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 10px;
+}
+
+.criteria-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  @media (max-width: 480px) { grid-template-columns: 1fr; }
+}
+
+.criteria-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--mr-ink);
+  background: var(--mr-bg);
+  border: 1px solid var(--mr-border);
+  border-radius: var(--mr-radius-sm);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+
+  &:has(input:checked) {
+    border-color: var(--mr-primary);
+    background: var(--mr-primary-soft);
+  }
+
+  input {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--mr-primary);
+  }
+}
+
+.form-card__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mr-border);
+}
+
+// ---- Illustration décorative ----
+
+.illustration-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.illustration {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+}
+
+.illustration__shadow {
+  fill: color-mix(in srgb, var(--mr-ink) 8%, transparent);
+}
+
+.illustration__panel {
+  fill: color-mix(in srgb, var(--mr-border) 60%, white);
+}
+
+.illustration__star {
+  fill: var(--mr-primary);
+}
+
+.illustration__line-fill {
+  fill: color-mix(in srgb, var(--mr-border) 80%, white);
+}
+
+.illustration__skin {
+  fill: var(--mr-primary-soft-2);
+}
+
+.illustration__clothes {
+  fill: var(--mr-primary);
+  stroke: var(--mr-primary);
+}
+
+.illustration__accent {
+  fill: var(--mr-primary-soft-2);
+}
+
+.illustration__caption {
+  font-size: 13px;
+  color: var(--mr-ink-soft);
+  max-width: 260px;
+  line-height: 1.5;
+}
+
+// ---- Boutons ----
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn--primary {
+  background: var(--mr-primary);
+  color: #fff;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--mr-primary) 88%, black);
+  }
+}

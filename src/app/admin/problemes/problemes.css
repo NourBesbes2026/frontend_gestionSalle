@@ -1,0 +1,35 @@
+.page-header {
+  margin-bottom: 20px;
+  h1 { font-size: 22px; margin-bottom: 4px; }
+}
+
+.toolbar {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  margin-bottom: 18px;
+
+  select {
+    font-family: var(--font-body);
+    font-size: 13.5px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+  }
+}
+
+.problemes__comment {
+  max-width: 260px;
+  white-space: normal;
+  color: var(--color-slate);
+}
+
+.problemes__statut-select {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  padding: 6px 8px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}

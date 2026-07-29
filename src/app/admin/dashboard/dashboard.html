@@ -1,0 +1,105 @@
+<div class="dashboard">
+  <div class="aurora" aria-hidden="true">
+    <span class="aurora__blob aurora__blob--1"></span>
+    <span class="aurora__blob aurora__blob--2"></span>
+    <span class="aurora__blob aurora__blob--3"></span>
+  </div>
+
+  <header class="page-header">
+    <div class="page-header__text">
+      <span class="eyebrow">Espace administrateur</span>
+      <h1>Tableau de bord</h1>
+      <p class="text-muted">Vue d'ensemble de l'activité des salles de formation</p>
+    </div>
+
+    @if (lastUpdated(); as updated) {
+      <div class="live-badge">
+        <span class="live-badge__dot"></span>
+        Mis à jour à {{ updated | date: 'HH:mm' }}
+      </div>
+    }
+  </header>
+
+  @if (loading()) {
+    <div class="stat-grid" aria-hidden="true">
+      @for (i of [1, 2, 3, 4]; track i) {
+        <div class="skeleton-card"></div>
+      }
+    </div>
+  } @else if (stats()) {
+    <section class="stat-grid">
+      <app-stat-card [value]="stats()!.nombre_total_salles" label="Salles au total" accent="primary" class="reveal">
+        <span icon class="icon-badge icon-badge--primary">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M5 21V5a1 1 0 0 1 1-1h9l4 4v13" stroke="currentColor" stroke-width="1.8"/><path d="M5 21h13" stroke="currentColor" stroke-width="1.8"/></svg>
+        </span>
+      </app-stat-card>
+
+      <app-stat-card [value]="stats()!.salles_disponibles" label="Salles disponibles" accent="success" class="reveal">
+        <span icon class="icon-badge icon-badge--success">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </app-stat-card>
+
+      <app-stat-card [value]="stats()!.taux_occupation + '%'" label="Taux d'occupation" accent="accent" class="reveal">
+        <span icon class="icon-badge icon-badge--accent">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V9m6 10V4m6 15v-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+      </app-stat-card>
+
+      <app-stat-card [value]="stats()!.nombre_problemes" label="Problèmes signalés" accent="info" class="reveal">
+        <span icon class="icon-badge icon-badge--info">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 2 20h20L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4M12 17v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+      </app-stat-card>
+    </section>
+
+    <section class="stat-grid stat-grid--secondary">
+      <app-stat-card [value]="stats()!.reservations_validees" label="Réservations validées" accent="success" class="reveal">
+        <span icon class="icon-badge icon-badge--success">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z" stroke="currentColor" stroke-width="1.6"/><path d="m8.5 12.5 2.3 2.3L15.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </app-stat-card>
+
+      <app-stat-card [value]="stats()!.reservations_en_attente" label="Réservations en attente" accent="accent" class="reveal">
+        <span icon class="icon-badge icon-badge--accent">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </app-stat-card>
+
+      <app-stat-card [value]="stats()!.reservations_refusees" label="Réservations refusées" accent="primary" class="reveal">
+        <span icon class="icon-badge icon-badge--primary">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="m9.5 9.5 5 5m0-5-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+      </app-stat-card>
+
+      <app-stat-card [value]="stats()!.nombre_avis" label="Avis déposés" accent="info" class="reveal">
+        <span icon class="icon-badge icon-badge--info">
+          <svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.6 5.4 5.9.9-4.3 4.1 1 5.9L12 16.6 6.8 19.3l1-5.9-4.3-4.1 5.9-.9L12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </span>
+      </app-stat-card>
+    </section>
+
+    <section class="chart-grid">
+      <div class="card chart-card reveal">
+        <div class="chart-card__header">
+          <div>
+            <h3>Réservations par mois</h3>
+            <p class="chart-card__subtitle">Évolution du volume de réservations</p>
+          </div>
+          <span class="chart-card__badge chart-card__badge--primary">Tendance</span>
+        </div>
+        <app-bar-chart [data]="reservationsBarData()" />
+      </div>
+
+      <div class="card chart-card reveal">
+        <div class="chart-card__header">
+          <div>
+            <h3>Problèmes par statut</h3>
+            <p class="chart-card__subtitle">Répartition actuelle des signalements</p>
+          </div>
+        </div>
+        <app-donut-chart [slices]="problemesDonutData()" />
+      </div>
+    </section>
+  }
+</div>
